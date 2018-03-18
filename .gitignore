@@ -1,0 +1,9 @@
+*.Rproj
+*.Rproj.user
+.Rhistory
+.Rproj.user
+.DS_Store
+.httr-oauth
+*.log*
+*key.R*
+*data*
