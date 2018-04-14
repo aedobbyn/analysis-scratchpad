@@ -1,6 +1,8 @@
 
 library(tidyverse)
-library(fuzzyjoin)
+library(fuzzyjoin)   # https://github.com/dgrtwo/fuzzyjoin/blob/master/R/fuzzy_join.R
+# Another option: https://stackoverflow.com/questions/6683380/techniques-for-finding-near-duplicate-records
+## RecordLinkage and rrefine
 
 nd_dat <- tibble(
   name = c("John Smith", "Sally Ride", "Ruth Bader"),
@@ -27,7 +29,8 @@ ld_dat <- tibble(
 nd_dat %>% stringdist_full_join(ld_dat, 
                            by = c("name" = "name",
                                   "company" = "company",
-                                  "job_title" = "job_title"),
+                                  "job_title" = "job_title",
+                                  "phone_number" = "phone_number"),
                            method = "cosine",
                            distance_col = "dist_col",
                            max_dist = 2) %>% 
@@ -35,7 +38,4 @@ nd_dat %>% stringdist_full_join(ld_dat,
   arrange(name.dist_col, company.dist_col) %>% 
   slice(1) %>% 
   View()
-
-
-
 
