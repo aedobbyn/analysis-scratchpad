@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1531364357475.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "ECECC692",
+    "lastKnownWriteTime" : 1523381765,
+    "last_content_update" : 1523381765,
+    "path" : "~/nd_ld.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "11,60",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

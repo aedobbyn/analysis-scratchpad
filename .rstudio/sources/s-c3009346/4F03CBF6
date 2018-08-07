@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1531364381234.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "2779366782",
+    "id" : "4F03CBF6",
+    "lastKnownWriteTime" : 1531364397,
+    "last_content_update" : 1531364398688,
+    "path" : "~/foobar.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "0,5",
+        "scrollLine" : "0",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

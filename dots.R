@@ -35,3 +35,14 @@ c <- function(...) {
 
 c(x = 3, y = 8)
 
+
+
+d <- function(...) {
+  dots <- list(...) %>% 
+    unlist() %>% 
+    stringr::str_c(collapse = "")
+  
+  print(dots)
+}
+
+d(x = 4, z = 5)
