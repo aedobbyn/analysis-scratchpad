@@ -5,7 +5,7 @@
 .DS_Store
 .httr-oauth
 *.log*
-*key.R*
+*keys*
 *data*
 *scratch
 repo_b/*.git
