@@ -7,7 +7,7 @@ source(here("keys.R"))
 con <- dbConnect(MySQL(),
                  username = user,
                  password = pw,
-                 dbname = db_name,
+                 dbname = "master",
                  host = host,
                  port = 3306)
 
@@ -55,12 +55,12 @@ create_tbl_query <-
   "
 CREATE TABLE zips_zones (
   id INT NOT NULL AUTO_INCREMENT,
-  origin_zip INT NOT NULL,
-  dest_zip INT NULL,
+  origin_zip VARCHAR(5) NOT NULL,
+  dest_zip VARCHAR(5) NULL,
   zone INT NULL,
-  specific_to_priority_mail TINYINT NULL,
-  same_ndc TINYINT NULL,
-  has_five_digit_exceptions TINYINT NULL,
+  specific_to_priority_mail TINYINT(1) NULL,
+  same_ndc TINYINT(1) NULL,
+  has_five_digit_exceptions TINYINT(1) NULL,
   created_at TIMESTAMP NULL,
   updated_at TIMESTAMP NULL,
   deleted_at TIMESTAMP NULL,
