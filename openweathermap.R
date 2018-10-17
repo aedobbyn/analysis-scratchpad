@@ -18,6 +18,3 @@ here_now <-
 bk_forecast <- get_forecast("Brooklyn", units = "metric")
 
 
-
-
-
