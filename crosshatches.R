@@ -21,7 +21,6 @@ bar <-
 
 layers <-
   list(
-    geom_bar(aes(eye_color_parent, fill = eye_color, color = any_red)),
       theme_light(),
       scale_color_manual(values = c("black", "blue")),
       scale_fill_brewer(palette = 3)
@@ -30,14 +29,19 @@ layers <-
 (foo_plt <- 
   foo %>% 
     ggplot() +
+    geom_bar(aes(eye_color_parent, fill = eye_color, color = any_red)) +
     layers +
-    geom_hline(yintercept = 4)
+    # geom_hline(yintercept = 4) +
+    geom_segment(aes(x = 0.5, y = 5, xend = 1, yend = 5)) +
+    geom_segment(aes(x = 1.55, y = 10, xend = 2, yend = 10))
   )
 
 bar %>% 
   ggplot() +
+  geom_bar(aes(eye_color_parent, n, 
+               fill = eye_color, color = any_red), stat = "identity") +
   layers +
-  geom_segment(aes(x = eye_color_parent, y = n, xend = eye_color_parent, yend = 21), angle = 90)
+  geom_segment(aes(x = 0.5, y = 5, xend = 1, yend = 5))
 
 
 foo_plt_dat <- 
@@ -86,6 +90,16 @@ segs <-
 foo_plt_dat$data[[2]] <- segs
 
 ggplot_gtable(foo_plt_dat) %>% plot()
+
+
+
+
+
+
+
+
+
+
 
 
 pattern.type<-c('hdashes', 'blank', 'crosshatch')
