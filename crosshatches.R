@@ -1,5 +1,5 @@
 
-# Goal is to add crosshatches to only eye_color_parent == "blue" where any_red == FALSE
+# Goal is to add crosshatches to only eye_color_parent == "blue" where mixed_color == FALSE
 
 library(tidyverse)
 
@@ -19,17 +19,17 @@ dat <-
         str_detect(eye_color, "blue") ~ "blue",
         TRUE ~ eye_color
       ),
-    any_red =
+    mixed_color =
       case_when(
-        str_detect(eye_color, "red") ~ TRUE,
+        str_detect(eye_color, "[-,]") ~ TRUE,
         TRUE ~ FALSE
       )
   ) %>%
-  select(name, eye_color, eye_color_parent, any_red)
+  select(name, eye_color, eye_color_parent, mixed_color)
 
 layers <-
   list(
-    geom_bar(aes(eye_color_parent, fill = eye_color, color = any_red)),
+    geom_bar(aes(eye_color_parent, fill = eye_color, color = mixed_color)),
     theme_light(),
     scale_color_manual(values = c("blue", "red")),
     scale_fill_brewer(palette = 3)
@@ -39,7 +39,7 @@ layers <-
   dat %>%
   ggplot() +
   layers +
-  geom_segment(aes(x = 0.5, y = 5, xend = 1, yend = 5)) # Random geom_segment to get template
+  geom_segment(aes(x = 0.5, y = 5, xend = 1, yend = 8)) # Random geom_segment to get template
 )
 
 # Dump the underlying plot data
@@ -56,24 +56,27 @@ seg_sep <- 0.3
 seg_seq_start <-
   plt_dat$data[[1]] %>%
   filter(colour == "blue") %>%
-  pull(y)
+  arrange(ymin) %>% 
+  pull(ymin) %>% 
+  first()
 
 seg_seq_end <-
   plt_dat$data[[1]] %>%
-  filter(colour == "black") %>%
+  filter(colour == "red") %>%
   arrange(desc(y)) %>%
   slice(1) %>%
   pull(y)
 
-seg_seq <- seq(seg_seq_start, seg_seq_end, by = seg_sep)
+seg_seq_1 <- seq(seg_seq_start, seg_seq_end, by = seg_sep)
+seg_seq_2 <- seq(seg_seq_start + 1, seg_seq_end + 1, by = seg_sep)
 
 segs <-
   tibble(
     colour = "black",
     x = 1.55,
     xend = 2.45,
-    y = seg_seq,
-    yend = seg_seq,
+    y = seg_seq_1,
+    yend = seg_seq_2,
     PANEL = 1,
     group = -1,
     size = 0.5,
