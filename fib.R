@@ -1,14 +1,12 @@
 
 fib <- function(x) {
-  out <- 0
-  
-  val <- 1
+  out <- c(0, 1)
   
   vec <- seq(x)
   
   for (i in seq_along(vec)) {
     if (i < x) {
-      this <- vec[i] + out[length(out)]
+      this <- out[length(out) - 1] + out[length(out)]
       
       out <- c(out, this)
     }
@@ -17,4 +15,4 @@ fib <- function(x) {
   out
 }
 
-fib(5)
+fib(10)
