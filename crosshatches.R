@@ -67,16 +67,49 @@ seg_seq_end <-
   slice(1) %>%
   pull(y)
 
-seg_seq_1 <- seq(seg_seq_start, seg_seq_end, by = seg_sep)
-seg_seq_2 <- seq(seg_seq_start + 1, seg_seq_end + 1, by = seg_sep)
+m <- 0.5
+
+y2 <- 6
+x2 <- 2.45
+x1 <- 1.45
+# (6 - y1) / (2.45 - 1.55) = m
+y1 <- -1 * ((m * (x2 - x1)) - y2)
+
+y_step <- y2 - y1
+y3 <- y2 - y_step
+
+b2 <- y2 - m*x2
+b1 <- y1 - m*x1
+
+# w2 <- (y2 - b2)/m
+# w1 <- (y1 - b1)/m
+
+
+
+y_start <- seq(seg_seq_start - y_step, seg_seq_end - y_step, by = seg_sep)
+y_end <- seq(seg_seq_start, seg_seq_end, by = seg_sep)
+
+# Take out ones where leftmost y val will be less than 0
+y_start <- y_start[which(y_start >= 0)] 
+
+seg_diff <- length(y_end) - length(y_start)
+
+y_end <- y_end[seg_diff + 1:length(y_start)] %>% 
+  c(rep(6, seg_diff))
+
+x_ends_new <- seq(1.55, 2.45, 0.3)
+# len_x_ends_new <- length(x_ends_new)
+x_end <- rep(2.45, length(y_start)) %>% c(x_ends_new)
+
+y_start <- seq(seg_seq_start, seg_seq_end, by = seg_sep)
 
 segs <-
   tibble(
     colour = "black",
     x = 1.55,
-    xend = 2.45,
-    y = seg_seq_1,
-    yend = seg_seq_2,
+    xend = x_end %>% sort(),
+    y = y_start %>% sort(),
+    yend = y_end %>% sort(),
     PANEL = 1,
     group = -1,
     size = 0.5,
