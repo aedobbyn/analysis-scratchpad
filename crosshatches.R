@@ -3,6 +3,7 @@
 
 library(tidyverse)
 
+# ------------------------- Make some sample data --------------------------
 raw <- starwars
 
 # Make groups a bit more even
@@ -24,95 +25,152 @@ dat <-
       case_when(
         str_detect(eye_color, "[-,]") ~ "Yes",
         TRUE ~ "No"
-      ) %>% 
-      factor() %>% 
-      fct_relevel(c("Yes", "No"))
+      ) %>%
+        factor() %>%
+        fct_relevel(c("Yes", "No"))
   ) %>%
   select(name, eye_color, eye_color_parent, mixed_color)
 
+# --------------------------------------------------------------------------
+
+# -------------------------- Prep plot layers ------------------------------
 layers <-
   list(
     geom_bar(aes(eye_color_parent, fill = eye_color, color = mixed_color)),
     theme_light(),
-    scale_color_manual(values = c("blue", "red")),
+    scale_color_manual(values = c("blue", "black")),
     scale_fill_brewer(palette = 3, direction = -1),
     ggtitle("Eye color in Starwars characters"),
-    labs(x = "Parent group eye color", y = "N", 
-         fill = "Child group eye color", colour = "Mixed eye color?")
+    labs(
+      x = "Parent group eye color", y = "N",
+      fill = "Child group eye color", colour = "Mixed eye color?"
+    )
   )
 
-(plt <-
-  dat %>%
-  ggplot() +
-  layers +
-  geom_segment(aes(x = 0.5, y = 5, xend = 1, yend = 8)) # Random geom_segment to get template
-)
+# ---------------------------------------------------------------------------
 
-# Dump the underlying plot data
-plt_dat <-
-  plt %>%
-  ggplot_build()
+# Add little +s
 
-# Check out data
-plt_dat$data
+add_dots <- function(dat, gg_layers,
+                     bar_num = 2, # Which bar to add to?
+                     groups = c(3, 4), # Groups counted from top -> bottom, left -> right
+                     n_rows = 12, # Num rows of dots
+                     buffer_perc = 2, # Percent buffer around top, bottom, and sides
+                     y_len = 0.16, # Length of vertical part of +
+                     line_colour = "black",
+                     line_size = 0.5,
+                     line_type = 1,
+                     alpha = NA) {
+  plt <-
+    dat %>%
+    ggplot() +
+    layers +
+    # Random geom_segment to get template
+    geom_segment(aes(x = 0.5, y = 5, xend = 1, yend = 8))
 
+  # Dump the underlying plot data
+  plt_dat <-
+    plt %>%
+    ggplot_build()
 
-box_dims <- 
-  tibble(
-    xmin = 1.55,
-    xmax = 2.45,
-    ymin = 0, 
-    ymax = 6
-  )
-
-n_rows <- 12
-
-x_seq <- seq(box_dims$xmin + 0.01, box_dims$xmax - 0.01, by = 0.01)
-# Take only the even indices
-x_seq <- x_seq[which(seq(length(x_seq)) %% 2 == 0)]
-
-horiz_lines <- tibble(
-  x_starts = x_seq,
-  x_ends = x_starts + 0.01,
-  y_starts = seq(box_dims$ymin + 0.3, box_dims$ymax - 0.3, length.out = n_rows) %>% 
-    list(),
-  y_ends = y_starts 
-) %>% 
-  unnest()
-
-vert_lines <- 
-  horiz_lines %>% 
-  mutate(
-    x_starts = (x_starts + x_ends)/2,
-    x_ends = x_starts,
-    y_starts = y_starts + 0.08,
-    y_ends = y_ends - 0.08
-  )
-
-lines <- 
-  bind_rows(horiz_lines, vert_lines)
-
-segments <-
-  lines %>% 
-  rename(
-    x = x_starts,
-    xend = x_ends,
-    y = y_starts,
-    yend = y_ends
-  ) %>% 
-  mutate(
-    colour = "black",
-    PANEL = 1,
-    group = -1,
-    size = 0.5,
-    linetype = 1,
-    alpha = NA
-  )
+  coord_dat <-
+    plt_dat$data[[1]] %>%
+    filter(
+      x == bar_num,
+      group %in% groups
+    )
   
-# Replace our throwaway segment with segs
-plt_dat$data[[2]] <- segments
+  x_coords <-
+    coord_dat %>%
+    select(xmin, xmax) %>%
+    slice(1) # These should be identical because we're only looking at one bar, so take only the first
 
-# Get new plot
-ggplot_gtable(plt_dat) %>%
-  plot()
+  y_coords <-
+    coord_dat %>%
+    # Find highest high and lowest low
+    mutate(
+      ymin = min(ymin),
+      ymax = max(ymax)
+    ) %>%
+    slice(1)
 
+  box_dims <-
+    tibble(
+      xmin = x_coords$xmin,
+      xmax = x_coords$xmax,
+      ymin = y_coords$ymin,
+      ymax = y_coords$ymax,
+      x_buffer = (xmax - xmin) * buffer_perc / 100,
+      y_buffer = (ymax - ymin) * buffer_perc / 100
+    )
+
+  x_seq <- seq(box_dims$xmin + box_dims$x_buffer,
+    box_dims$xmax - box_dims$x_buffer,
+    by = box_dims$x_buffer
+  )
+  # Take only the even indices
+  x_seq <- x_seq[which(seq(length(x_seq)) %% 2 == 0)]
+  
+  # This will get nested and apply to all rows
+  y_seq <- seq(box_dims$ymin + box_dims$y_buffer,
+               box_dims$ymax - box_dims$y_buffer,
+               length.out = n_rows)
+
+  horiz_lines <- tibble(
+    x_starts = x_seq,
+    x_ends = x_starts + box_dims$x_buffer,
+    y_starts = y_seq %>% list(),
+    y_ends = y_starts
+  ) %>%
+    unnest()
+  # mutate(
+  #   x_starts =
+  #     case_when(
+  #       row_number() %% 2 != 0 ~ x_starts - box_dims$x_buffer,
+  #       TRUE ~ x_starts
+  #     ),
+  #   x_ends =
+  #     case_when(
+  #       row_number() %% 2 != 0 ~ x_starts - box_dims$x_buffer,
+  #       TRUE ~ x_starts
+  #     )
+  # )
+
+  vert_lines <-
+    horiz_lines %>%
+    mutate(
+      x_starts = (x_starts + x_ends) / 2, # Find midpoint of x lines
+      x_ends = x_starts,
+      y_starts = y_starts + y_len / 2, # Half above the x, half below
+      y_ends = y_ends - y_len / 2
+    )
+
+  lines <-
+    bind_rows(horiz_lines, vert_lines)
+
+  segments <-
+    lines %>%
+    rename(
+      x = x_starts,
+      xend = x_ends,
+      y = y_starts,
+      yend = y_ends
+    ) %>%
+    mutate(
+      colour = line_colour,
+      PANEL = 1,
+      group = -1,
+      size = line_size,
+      linetype = line_type,
+      alpha = alpha
+    )
+
+  # Replace our throwaway segment with segs
+  plt_dat$data[[2]] <- segments
+
+  # Get new plot
+  ggplot_gtable(plt_dat) %>%
+    plot()
+}
+
+add_dots(dat, gg_layers = layers, groups = c(3, 4))
