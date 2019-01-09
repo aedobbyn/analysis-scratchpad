@@ -50,42 +50,61 @@ plt_dat <-
 # Check out data
 plt_dat$data
 
-# Create segments
-seg_sep <- 0.3 
 
-seg_seq_start <-
-  plt_dat$data[[1]] %>%
-  filter(colour == "blue") %>%
-  arrange(ymin) %>% 
-  pull(ymin) %>% 
-  first()
-
-seg_seq_end <-
-  plt_dat$data[[1]] %>%
-  filter(colour == "red") %>%
-  arrange(desc(y)) %>%
-  slice(1) %>%
-  pull(y)
-
-seg_seq_1 <- seq(seg_seq_start, seg_seq_end, by = seg_sep)
-seg_seq_2 <- seq(seg_seq_start + 1, seg_seq_end + 1, by = seg_sep)
-
-segs <-
+box_dims <- 
   tibble(
+    xmin = 1.55,
+    xmax = 2.45,
+    ymin = 0, 
+    ymax = 6
+  )
+
+n_rows <- 8
+
+x_seq <- seq(box_dims$xmin + 0.01, box_dims$xmax - 0.01, by = 0.01)
+# Take only the even indices
+x_seq <- x_seq[which(seq(length(x_seq)) %% 2 == 0)]
+
+horiz_lines <- tibble(
+  x_starts = x_seq,
+  x_ends = x_starts + 0.01,
+  y_starts = seq(box_dims$ymin + 0.3, box_dims$ymax - 0.3, length.out = n_rows) %>% 
+    list(),
+  y_ends = y_starts 
+) %>% 
+  unnest()
+
+vert_lines <- 
+  horiz_lines %>% 
+  mutate(
+    x_starts = (x_starts + x_ends)/2,
+    x_ends = x_starts,
+    y_starts = y_starts + 0.08,
+    y_ends = y_ends - 0.08
+  )
+
+lines <- 
+  bind_rows(horiz_lines, vert_lines)
+
+segments <-
+  lines %>% 
+  rename(
+    x = x_starts,
+    xend = x_ends,
+    y = y_starts,
+    yend = y_ends
+  ) %>% 
+  mutate(
     colour = "black",
-    x = 1.55,
-    xend = 2.45,
-    y = seg_seq_1,
-    yend = seg_seq_2,
     PANEL = 1,
     group = -1,
     size = 0.5,
     linetype = 1,
     alpha = NA
   )
-
+  
 # Replace our throwaway segment with segs
-plt_dat$data[[2]] <- segs
+plt_dat$data[[2]] <- segments
 
 # Get new plot
 ggplot_gtable(plt_dat) %>%
