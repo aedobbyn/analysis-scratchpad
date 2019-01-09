@@ -14,16 +14,19 @@ dat <-
   drop_na(eye_color) %>%
   filter(eye_color %in% c("black", "blue", "blue-gray", "red, blue")) %>%
   mutate(
+    eye_color = eye_color %>% map_chr(dobtools::simple_cap),
     eye_color_parent =
       case_when(
-        str_detect(eye_color, "blue") ~ "blue",
+        str_detect(eye_color, "[Bb]lue") ~ "Blue",
         TRUE ~ eye_color
       ),
     mixed_color =
       case_when(
-        str_detect(eye_color, "[-,]") ~ TRUE,
-        TRUE ~ FALSE
-      )
+        str_detect(eye_color, "[-,]") ~ "Yes",
+        TRUE ~ "No"
+      ) %>% 
+      factor() %>% 
+      fct_relevel(c("Yes", "No"))
   ) %>%
   select(name, eye_color, eye_color_parent, mixed_color)
 
@@ -32,7 +35,10 @@ layers <-
     geom_bar(aes(eye_color_parent, fill = eye_color, color = mixed_color)),
     theme_light(),
     scale_color_manual(values = c("blue", "red")),
-    scale_fill_brewer(palette = 3)
+    scale_fill_brewer(palette = 3, direction = -1),
+    ggtitle("Eye color in Starwars characters"),
+    labs(x = "Parent group eye color", y = "N", 
+         fill = "Child group eye color", colour = "Mixed eye color?")
   )
 
 (plt <-
@@ -59,7 +65,7 @@ box_dims <-
     ymax = 6
   )
 
-n_rows <- 8
+n_rows <- 12
 
 x_seq <- seq(box_dims$xmin + 0.01, box_dims$xmax - 0.01, by = 0.01)
 # Take only the even indices
