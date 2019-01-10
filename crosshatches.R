@@ -65,7 +65,7 @@ add_dots <- function(dat, gg_layers,
     dat %>%
     ggplot() +
     layers +
-    # Random geom_segment to get template
+    # Random geom_segment to get template for plt_dat$data[[2]]
     geom_segment(aes(x = 0.5, y = 5, xend = 1, yend = 8))
 
   # Dump the underlying plot data
@@ -122,19 +122,19 @@ add_dots <- function(dat, gg_layers,
     y_starts = y_seq %>% list(),
     y_ends = y_starts
   ) %>%
-    unnest()
-  # mutate(
-  #   x_starts =
-  #     case_when(
-  #       row_number() %% 2 != 0 ~ x_starts - box_dims$x_buffer,
-  #       TRUE ~ x_starts
-  #     ),
-  #   x_ends =
-  #     case_when(
-  #       row_number() %% 2 != 0 ~ x_starts - box_dims$x_buffer,
-  #       TRUE ~ x_starts
-  #     )
-  # )
+    unnest() %>% 
+  mutate(
+    x_starts =
+      case_when(
+        row_number() %% 2 != 0 ~ (x_starts - box_dims$x_buffer*0.75),
+        TRUE ~ x_starts
+      ),
+    x_ends =
+      case_when(
+        row_number() %% 2 != 0 ~ (x_ends - box_dims$x_buffer*0.75),
+        TRUE ~ x_ends
+      )
+  )
 
   vert_lines <-
     horiz_lines %>%
@@ -174,3 +174,4 @@ add_dots <- function(dat, gg_layers,
 }
 
 add_dots(dat, gg_layers = layers, groups = c(3, 4))
+add_dots(dat, gg_layers = layers, n_rows = 16, groups = c(2, 3))
