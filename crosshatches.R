@@ -51,16 +51,43 @@ layers <-
 
 # Add little +s
 
-add_dots <- function(dat, gg_layers,
+add_dots <- function(dat,
+                     gg_layers,
                      bar_num = 2, # Which bar to add to?
                      groups = c(3, 4), # Groups counted from top -> bottom, left -> right
                      n_rows = 12, # Num rows of dots
                      buffer_perc = 2, # Percent buffer around top, bottom, and sides
+                     offset_row = 0.667, # Percent of buffer to offset by
                      y_len = 0.16, # Length of vertical part of +
                      line_colour = "black",
                      line_size = 0.5,
                      line_type = 1,
                      alpha = NA) {
+  
+  if (is.null(dat) || is.null(gg_layers)) {
+    stop("dat and gg_layers must be non-null.")
+  }
+
+  if (!"GeomBar" %in% class(gg_layers[[1]]$geom)) {
+    stop("gg_layers must contain a call to geom_bar.")
+  }
+  
+  if (!is.character(line_colour)) stop("line_colour must be of class character.")
+  
+  must_be_num <- list(bar_num, groups, n_rows, buffer_perc, 
+                   offset_row, y_len, line_size, line_type)
+  
+  if (any(! map_lgl(must_be_num, is.numeric))) {
+    not_num <-
+      must_be_num[! map_lgl(must_be_num, is.numeric)] %>%
+      str_c(collapse = ", ")
+    stop(glue::glue("{not_num} not of class numeric."))
+  }
+  
+  if (max(groups) - min(groups) > 1) {
+    stop("This function does not currently support non-adjacent group shading :(")
+  }
+
   plt <-
     dat %>%
     ggplot() +
@@ -79,7 +106,7 @@ add_dots <- function(dat, gg_layers,
       x == bar_num,
       group %in% groups
     )
-  
+
   x_coords <-
     coord_dat %>%
     select(xmin, xmax) %>%
@@ -104,17 +131,19 @@ add_dots <- function(dat, gg_layers,
       y_buffer = (ymax - ymin) * buffer_perc / 100
     )
 
-  x_seq <- seq(box_dims$xmin + box_dims$x_buffer,
-    box_dims$xmax - box_dims$x_buffer,
-    by = box_dims$x_buffer
-  )
+  x_seq <-
+    seq(box_dims$xmin + box_dims$x_buffer,
+      box_dims$xmax - box_dims$x_buffer,
+      by = box_dims$x_buffer
+    )
   # Take only the even indices
   x_seq <- x_seq[which(seq(length(x_seq)) %% 2 == 0)]
-  
+
   # This will get nested and apply to all rows
   y_seq <- seq(box_dims$ymin + box_dims$y_buffer,
-               box_dims$ymax - box_dims$y_buffer,
-               length.out = n_rows)
+    box_dims$ymax - box_dims$y_buffer,
+    length.out = n_rows
+  )
 
   horiz_lines <- tibble(
     x_starts = x_seq,
@@ -122,19 +151,20 @@ add_dots <- function(dat, gg_layers,
     y_starts = y_seq %>% list(),
     y_ends = y_starts
   ) %>%
-    unnest() %>% 
-  mutate(
-    x_starts =
-      case_when(
-        row_number() %% 2 != 0 ~ (x_starts - box_dims$x_buffer*0.75),
-        TRUE ~ x_starts
-      ),
-    x_ends =
-      case_when(
-        row_number() %% 2 != 0 ~ (x_ends - box_dims$x_buffer*0.75),
-        TRUE ~ x_ends
-      )
-  )
+    unnest() %>%
+    # Offset every other row by offset_row
+    mutate(
+      x_starts =
+        case_when(
+          row_number() %% 2 != 0 ~ (x_starts - box_dims$x_buffer * offset_row),
+          TRUE ~ x_starts
+        ),
+      x_ends =
+        case_when(
+          row_number() %% 2 != 0 ~ (x_ends - box_dims$x_buffer * offset_row),
+          TRUE ~ x_ends
+        )
+    )
 
   vert_lines <-
     horiz_lines %>%
