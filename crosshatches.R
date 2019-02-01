@@ -204,4 +204,4 @@ add_dots <- function(dat,
 }
 
 add_dots(dat, gg_layers = layers, groups = c(3, 4))
-add_dots(dat, gg_layers = layers, n_rows = 16, groups = c(2, 3))
+add_dots(dat, gg_layers = layers, n_rows = 24, groups = c(2, 3))
