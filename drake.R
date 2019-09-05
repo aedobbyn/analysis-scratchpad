@@ -260,3 +260,35 @@ dbDisconnect(con)
 
 
 
+
+
+
+
+
+
+
+library(drake)
+
+plan <- 
+  drake_plan(
+    foo = 1:10,
+    bar = foo^2,
+    baz = log("a")
+  )
+
+config <- drake_config(plan)
+
+make(plan, cache_log_file = "drake_cache_log.csv")
+
+drake_build(baz, config = config)
+
+
+
+
+
+
+
+
+
+
+

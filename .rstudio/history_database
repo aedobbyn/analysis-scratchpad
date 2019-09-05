@@ -1,0 +1,512 @@
+0:e <- simpleError("An error occurred.")
+0:tryCatch(inp, error = function(e) {
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:e <- simpleError("An error occurred.")
+0:tryCatch(inp, error = function(e) {
+0:print(e)
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:str(simpleError("An error occurred."))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:e <- simpleError("An error occurred.")
+0:tryCatch(inp, error = function(e) {
+0:message(e$message)
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:msg <- "An error occurred."
+0:e <- simpleError()
+0:tryCatch(inp, error = function(e) {
+0:message(msg)
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:msg <- "An error occurred."
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(msg)
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:msg <- "An error occurred."
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:msg <- "An error occurred."
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": " e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:msg <- "An error occurred."
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:msg <- paste0("An error occurred in ", eval(deparse(inp)))
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:msg <- paste0("An error occurred in ", eval(deparse(inp)))
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:debugonce(beep_on_error)
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:msg <- paste0("An error occurred in ", eval(deparse(inp)))
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:debugonce(beep_on_error)
+0:beep_on_error(log("foo"))
+0:inp
+0:eval(deparse(inp)))
+0:eval(deparse(inp))
+0:deparse(inp)
+0:parse(inp)
+0:substitute(inp)
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:msg <- paste0("An error occurred in ", substitute(inp))
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:msg <- paste0("An error occurred in ", quote(substitute(inp)))
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:debugonce(beep_on_error)
+0:beep_on_error(log("foo"))
+0:substitute(inp)
+0:paste0("An error occurred in ", substitute(inp))
+0:paste0(str_c("An error occurred in ", substitute(inp)))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:q_inp <- substitute(inp)
+0:msg <- paste0("An error occurred in ", q_inp)
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:library(glue)
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:q_inp <- substitute(inp)
+0:msg <- glue("An error occurred in {q_inp}")
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error(log("foo"))
+0:debugonce(beep_on_error)
+0:beep_on_error(log("foo"))
+0:q_inp
+0:glue("An error occurred in {q_inp}")
+0:quote(q_inp)
+0:str(q_inp)
+0:q_inp <- "bar"
+0:glue("An error occurred in {q_inp}")
+0:q_inp <- substitute(inp)
+0:parse(q_inp)
+0:deparse(q_inp)
+0:glue("An error occurred in {deparse(q_inp)}")
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:q_inp <- substitute(inp)
+0:msg <- glue("An error occurred in {deparse(q_inp)}")
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error(log(1))
+0:beep_on_error(log(3))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:q_inp <- substitute(inp)
+0:msg <- glue("An error occurred in {deparse(q_inp)}")
+0:e <- simpleError()
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:q_inp <- substitute(inp)
+0:msg <- glue("An error occurred in {deparse(q_inp)}")
+0:e <- simpleError("Error")
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:?simpleError
+0:log("foo") %>% beep_on_error()
+0:beep_on_error(log(3)) %>% beep_on_error()
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:q_inp <- substitute(inp)
+0:msg <- paste0("An error occurred in, deparse(q_inp)")
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error(log(3))
+0:reprex::reprex(venue = "gh")
+0:reprex::reprex(venue = "gh")
+0:reprex::reprex(venue = "gh")
+0:devtools::install_github("tidyverse/reprex")
+0:library(reprex)
+0:reprex()
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:q_inp <- substitute(inp)
+0:msg <- paste0("An error occurred in, deparse(q_inp)")
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:reprex::reprex(venue = "gh")
+0:reprex::reprex(venue = "gh")
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:q_inp <- substitute(inp)
+0:msg <- paste0("An error occurred in ", deparse(q_inp))
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:reprex::reprex(venue = "gh")
+0:library(beepr)
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:q_inp <- substitute(inp)
+0:msg <- paste0("An error occurred in ", deparse(q_inp))
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:reprex(venue = "gh")
+0:reprex(venue = "so")
+0:reprex(venue = "so")
+0:reprex(venue = "gh")
+0:reprex(venue = "gh")
+0:reprex(venue = "gh")
+0:reprex(venue = "gh")
+0:reprex(venue = "gh")
+0:beep_on_error() %>% log("foo")
+0:beep_on_error <- function(inp, error_beep = 9) {
+0:# q_inp <- substitute(inp)
+0:#
+0:# msg <- paste0("An error occurred in ", deparse(q_inp))
+0:msg <- "bar"
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(error_beep)
+0:})
+0:}
+0:beep_on_error() %>% log("foo")
+0:0.01*20000000
+0:Sys.getpid()
+0:beep_on_error <- function(expr, sound = 1) {
+0:q_expr <- substitute(expr)
+0:msg <- paste0("An error occurred in ", deparse(q_expr))
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(sound)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:library(beepr)
+0:beep_on_error <- function(expr, sound = 1) {
+0:q_expr <- substitute(expr)
+0:msg <- paste0("An error occurred in ", deparse(q_expr))
+0:e <- simpleError(msg)
+0:tryCatch(inp, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(sound)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error <- function(expr, sound = 1) {
+0:q_expr <- substitute(expr)
+0:msg <- paste0("An error occurred in ", deparse(q_expr))
+0:e <- simpleError(msg)
+0:tryCatch(expr, error = function(e) {
+0:message(paste0(msg, ": ", e$message))
+0:beep(sound)
+0:})
+0:}
+0:beep_on_error(log("foo"))
+0:beep_on_error(log(1))
+0:beep("willhelm")
+0:beep("wilhelm")
+0:rm(beep_on_error)
+0:install_github("aedobbyn/beepr")
+0:devtools::install_github("aedobbyn/beepr")
+0:library(beepr)
+0:beep_on_error(log("foo"))
+0:devtools::install_github("aedobbyn/beepr", ref = "beep_on_error")
+0:beep_on_error(log("foo"))
+0:beep_on_error(log(1))
+0:beep_on_error(runif("bar"), "wilhelm")
+0:beep_on_error(1+"a")
+0:beep_on_error(1 + "a", sound = "wilhelm")
+0:devtools::install_github("ropensci/monkeylearn", ref = "T137-twitter-error")
+0:tweets <- readRDS(here::here("../..", "ultimate_tweets.rds"))
+0:library(monkeylearn)
+0:monkey_classify(tweets[1:5, ], text, classifier_id = "cl_qkjxv9Ly", texts_per_req = 2)
+0:reprex::reprex(venue = "gh")
+0:tweets <- rtweet::search_tweets("foo", n = 5)
+0:reprex::reprex(venue = "gh")
+0:reprex::reprex(venue = "gh")
+0:reprex::reprex(venue = "gh")
+0:reprex::reprex(venue = "gh")
+0:reprex::reprex(venue = "gh")
+0:reprex::reprex(venue = "gh")
+0:a <- function(x = 1,
+0:y = 2) {
+0:x + y
+0:}
+0:a()
+0:b <- function(...) {
+0:args <- list(...)
+0:a(args)
+0:}
+0:b()
+0:b <- function(...) {
+0:args <- list(...)
+0:print(args)
+0:a(args)
+0:}
+0:b()
+0:b(a = 3, b = 8)
+0:?match.arg
+0:b(x = 3, y = 8)
+0:?inheritedSubMethodLists
+0:b <- function(...) {
+0:args <- list(...)
+0:print(unlist(args))
+0:a(args)
+0:}
+0:b(x = 3, y = 8)
+0:b <- function(...) {
+0:args <- list(...)
+0:bargs <- unlist(args)
+0:a(bargs)
+0:}
+0:b(x = 3, y = 8)
+0:b()
+0:b <- function(...) {
+0:args <- list(...)
+0:bargs <- unlist(args)
+0:print(bargs)
+0:a(bargs)
+0:}
+0:b(x = 3, y = 8)
+0:debugonce(a)
+0:b(x = 3, y = 8)
+0:x
+0:x + y
+0:y
+0:x
+0:x
+0:a <- function(x = 1,
+0:y = 2, ...) {
+0:x + y
+0:}
+0:a()
+0:b <- function(...) {
+0:args <- list(...)
+0:bargs <- unlist(args)
+0:print(bargs)
+0:a(bargs)
+0:}
+0:b(x = 3, y = 8, ...)
+0:b(x = 3, y = 8)
+0:b <- function(...) {
+0:args <- list(...)
+0:# bargs <- unlist(args)
+0:print(bargs)
+0:x <- args$x
+0:y <- args$y
+0:a()
+0:}
+0:b(x = 3, y = 8)
+0:b <- function(...) {
+0:args <- list(...)
+0:# bargs <- unlist(args)
+0:# print(bargs)
+0:x <- args$x
+0:y <- args$y
+0:a()
+0:}
+0:b(x = 3, y = 8)
+0:b <- function(...) {
+0:args <- list(...)
+0:# bargs <- unlist(args)
+0:# print(bargs)
+0:x <- args$x
+0:y <- args$y
+0:a(x, y)
+0:}
+0:b(x = 3, y = 8)
+0:debugonce(a)
+0:b <- function(...) {
+0:args <- list(...)
+0:# bargs <- unlist(args)
+0:# print(bargs)
+0:x <- args$x
+0:y <- args$y
+0:a()
+0:}
+0:b(x = 3, y = 8)
+0:x
+0:y
+0:x
+0:y
+0:b <- function(...) {
+0:args <- list(...)
+0:# bargs <- unlist(args)
+0:# print(bargs)
+0:x <- args$x
+0:y <- args$y
+0:a(x, y)
+0:}
+0:b(x = 3, y = 8)
+0:b <- function(...) {
+0:args <- list(...)
+0:# bargs <- unlist(args)
+0:# print(bargs)
+0:x <- args$x
+0:y <- args$y
+0:do.call(a, args)
+0:}
+0:b(x = 3, y = 8)
+0:b <- function(...) {
+0:args <- list(...)
+0:# bargs <- unlist(args)
+0:# print(bargs)
+0:# x <- args$x
+0:# y <- args$y
+0:do.call(a, args)
+0:}
+0:b(x = 3, y = 8)
+0:b <- function(...) {
+0:args <- list(...)
+0:print(args)
+0:# bargs <- unlist(args)
+0:# print(bargs)
+0:# x <- args$x
+0:# y <- args$y
+0:do.call(a, args)
+0:}
+0:b(x = 3, y = 8)
+0:c <- function(...) {
+0:args <- match.call(...)
+0:print(args)
+0:# bargs <- unlist(args)
+0:# print(bargs)
+0:# x <- args$x
+0:# y <- args$y
+0:do.call(a, args)
+0:}
+0:c(x = 3, y = 8)
+0:?match.call
+0:c <- function(...) {
+0:args <- match.call(...)
+0:print(args)
+0:print(get(...))
+0:# bargs <- unlist(args)
+0:# print(bargs)
+0:# x <- args$x
+0:# y <- args$y
+0:do.call(a, args)
+0:}
+0:c(x = 3, y = 8)
+0:debugonce(c)
+0:c(x = 3, y = 8)
+0:...
+0:list(...)
+0:match.arg(...)
+0:list(...) %>% get()
+0:library(magrittr)
+0:list(...) %>% get()
+0:as.list(match.call())
+0:d <- function(...) {
+0:dots <- list(...) %>%
+0:unlist() %>%
+0:stringr::str_c(collapse = "")
+0:print(dots)
+0:}
+0:d(x = 4, z = 5)
+0:library(magrittr)
+0:d <- function(...) {
+0:dots <- list(...) %>%
+0:unlist() %>%
+0:stringr::str_c(collapse = "")
+0:print(dots)
+0:}
+0:d(x = 4, z = 5)

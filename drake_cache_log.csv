@@ -1,0 +1,8 @@
+hash,type,name
+4a44ae03ee64e771,import,add
+1032da4d237ccd37,target,bar
+a4f076b3db622faf,target,first
+d90b7a051df36710,target,foo
+b7acf49967a22244,import,rand_is_even
+d8e974eaf2263c6c,target,second
+97694e495fda481e,import,square

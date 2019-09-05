@@ -1,6 +1,7 @@
 
 library(rtweet)
 library(tidyverse)
+library(glue)
 
 search_tweets(q = "#MalortCourt",
               n = 500)
@@ -9,16 +10,21 @@ try_get_timeline <- possibly(get_timeline, otherwise = NULL)
   
 
 get_mc_tweets <- function(reg = "#malortcourt|#MalortCourt", 
-                          iters = 5, 
+                          max_iters = 10, 
                           n_per_pull = 3200, 
                           verbose = TRUE) {
   
+  i <- 1
   m_id <- NULL
   out <- NULL
     
-  for (i in seq(iters)) {
+  while (i <= max_iters) {
     
-    if (verbose) message(glue::glue("Starting iteration {i}."))
+    
+    if (verbose) {
+      message(glue("Starting iteration {i}."))
+      if (i == max_iters) message(glue("Reached maximum number of pulls."))
+    }
     
     this <- 
       try_get_timeline("ChicagoNemesis",
@@ -27,7 +33,7 @@ get_mc_tweets <- function(reg = "#malortcourt|#MalortCourt",
     
     # max_id "returns results with an ID less than (that is, older than) or equal to 'max_id'", so should always be 1 row
     if (nrow(this) <= 1) { 
-      if (verbose) message(glue::glue("Done after iteration {i}."))
+      if (verbose) message(glue("Done after iteration {i}."))
       return(out)
     }
     
@@ -43,6 +49,8 @@ get_mc_tweets <- function(reg = "#malortcourt|#MalortCourt",
     out <-
       out %>% 
       bind_rows(mcs)
+    
+    i <- i + 1
   }
   
   out
@@ -74,7 +82,6 @@ dat <-
   ) %>% 
   left_join(month_year_dict, 
             by = c("year" = "c_year")) %>%
-  rowwise() %>% 
   mutate(
     in_court =
       case_when(
