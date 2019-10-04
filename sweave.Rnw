@@ -1,0 +1,20 @@
+\documentclass{article}
+
+\begin{document}
+\SweaveOpts{concordance=TRUE}
+
+<<echo=F,results=tex>>=
+  adm <- 6
+  if(adm < 5){
+  text <- "foo"
+  } else {
+  text <- "bar"
+  }
+@
+
+<<print, results=tex, echo=FALSE>>=
+cat(text)
+@
+
+\end{document}
+
